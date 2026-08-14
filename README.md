@@ -1,22 +1,137 @@
-# AI ThreatGuard — Streamlit Edition
+# 🛡️ AI-ThreatSecurity
 
-A single-app Streamlit cybersecurity dashboard designed as a simpler deployment alternative to the original FastAPI + React architecture.
+> **AI-powered cybersecurity analysis platform for detecting, analyzing, and responding to digital threats.**
 
-## UI
+AI-ThreatSecurity is an advanced cybersecurity platform designed to help users identify potential threats such as **phishing attempts, suspicious URLs, malicious content, and security risks** through automated analysis and AI-assisted insights.
 
-The Streamlit edition uses a dark glassmorphism cyber command-center interface with neon gradients, 3D-style threat-core panels, KPI cards, and responsive navigation.
+The platform combines **Artificial Intelligence 🤖, Cybersecurity 🔐, Threat Intelligence 🕵️, and modern web technologies 🌐** into a centralized security analysis dashboard.
 
-## Features
+AI-ThreatSecurity provides an interactive environment for **threat detection, risk assessment, security analysis, scan history, and AI-powered cybersecurity assistance** through a modern 3D-inspired interface.
 
-- User registration/login with salted PBKDF2 password hashing
-- User/admin roles
-- URL threat heuristic scanner
-- Email/phishing analyzer
-- Security text analyzer
-- Scan history and CSV export
-- Dashboard metrics
-- Optional Google Gemini security assistant
-- SQLite fallback for local use; PostgreSQL/Neon support for persistent hosted deployments
+---
+
+## ✨ Key Features
+
+### 🔗 URL Threat Scanner
+
+Analyze suspicious URLs and identify potential security risks using automated threat analysis.
+
+- 🔍 URL structure analysis
+- ⚠️ Suspicious pattern detection
+- 📊 Threat scoring
+- 🚨 Risk classification
+- 📝 Security insights
+
+### 🎣 Phishing Detection
+
+Analyze suspicious emails and messages to identify potential phishing indicators.
+
+- 📧 Email analysis
+- 🔎 Suspicious pattern detection
+- 🚨 Phishing risk assessment
+- 📊 Threat scoring
+- 💡 AI-assisted insights
+
+### 📝 Threat Content Analyzer
+
+Analyze potentially malicious or suspicious content and identify security-related indicators.
+
+- 🔍 Content analysis
+- ⚠️ Suspicious keyword detection
+- 📊 Risk assessment
+- 🧠 AI-assisted analysis
+
+### 🤖 AI Cybersecurity Assistant
+
+An integrated AI assistant powered by **Google Gemini** to provide cybersecurity-related assistance.
+
+- 💬 Cybersecurity Q&A
+- 🧠 Threat analysis
+- 🔐 Defensive security guidance
+- 💡 Security recommendations
+- 📚 Security explanations
+
+### 📊 Security Dashboard
+
+A centralized dashboard for monitoring threat activity and security statistics.
+
+- 📈 Total scans
+- 🚨 Detected threats
+- 🟢 Safe results
+- ⚠️ High-risk findings
+- 📡 Threat activity
+- 💻 System status
+
+### 📜 Scan History
+
+Maintain and review previous security analyses.
+
+- 🗂️ Previous scans
+- 📅 Scan timestamps
+- 🎯 Scanned targets
+- 📊 Threat scores
+- 🚨 Risk classifications
+
+### 🔐 Authentication
+
+Secure user access and account management.
+
+- 👤 User registration
+- 🔑 Login authentication
+- 🚪 Logout
+- 🗂️ User-specific scan history
+- 👨‍💻 Admin access
+
+### 🔮 3D Cybersecurity Interface
+
+The platform features a modern cybersecurity command-center design with:
+
+- 🌐 Cyber grid interface
+- 🔮 3D-inspired threat intelligence core
+- 📡 Threat radar
+- ✨ Animated visual effects
+- 📊 Interactive security cards
+- 🖥️ System telemetry
+- ⚡ Real-time scanning animations
+- 🌑 Dark cybersecurity theme
+
+---
+
+## 🛠️ Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| 🐍 **Python** | Application development |
+| 🎈 **Streamlit** | Web application framework |
+| 🤖 **Google Gemini API** | AI-powered analysis and assistance |
+| 🗄️ **Neon PostgreSQL** | Database |
+| 🎨 **HTML / CSS** | Custom UI and visual design |
+| 🔐 **Authentication** | User access management |
+| 🐙 **Git / GitHub** | Version control |
+
+---
+
+## 🏗️ Project Structure
+
+```text
+AI-THREATSECURITY/
+│
+├── 📄 app.py
+├── 📄 db.py
+├── 📄 requirements.txt
+├── 📄 README.md
+│
+├── 📁 services/
+│   ├── 🤖 ai.py
+│   └── 🔍 scanner.py
+│
+├── 📁 utils/
+│   └── 🔐 auth.py
+│
+├── 📁 .streamlit/
+│   └── ⚙️ config.toml
+│
+└── 📁 data/
 
 ## Run locally
 
