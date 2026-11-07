@@ -39,6 +39,21 @@ html,body,[data-testid="stAppViewContainer"]{background:radial-gradient(900px 50
 .stButton>button{border:1px solid #1d4866!important;border-radius:12px!important;background:linear-gradient(135deg,#0b263b,#10182b)!important;color:#dff8ff!important;font-weight:800!important;letter-spacing:.02em;box-shadow:0 12px 30px rgba(0,0,0,.25)!important}.stButton>button:hover{border-color:#35ddff!important;box-shadow:0 0 24px rgba(53,221,255,.12)!important;transform:translateY(-2px)}
 div[data-baseweb="input"]>div,div[data-baseweb="textarea"]>div,div[data-baseweb="select"]>div{background:#050c16!important;border:1px solid #16334d!important;border-radius:12px!important}
 [data-testid="stDataFrame"]{border:1px solid #15334d;border-radius:16px;overflow:hidden}.footer{text-align:center;color:#405873;font:9px Orbitron,sans-serif;letter-spacing:.15em;padding:35px 0 5px}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:7px 11px;border-radius:999px;background:rgba(53,221,255,.07);border:1px solid rgba(53,221,255,.2);color:#83eaff;font:700 10px Inter,sans-serif;letter-spacing:.12em;margin:2px 0 14px}
+.cyber-title{font:800 clamp(2rem,4vw,3.2rem) Orbitron,sans-serif!important;letter-spacing:-.045em;line-height:1.12;color:#edf7ff;margin:0 0 8px}
+[data-testid="stMain"]>div{padding-top:1rem}
+[data-testid="stSidebar"] [role="radiogroup"]{gap:5px}
+[data-testid="stSidebar"] [role="radio"]{padding:9px 11px;border-radius:11px;transition:background .18s ease,color .18s ease}
+[data-testid="stSidebar"] [role="radio"]:hover{background:rgba(53,221,255,.07)}
+[data-testid="stSidebar"] [role="radio"]:has(input:checked){background:linear-gradient(90deg,rgba(53,221,255,.13),rgba(53,221,255,.035));box-shadow:inset 2px 0 #35ddff}
+[data-testid="stMetric"]{padding:17px 18px;border:1px solid #17334e;border-radius:16px;background:linear-gradient(145deg,rgba(12,25,42,.92),rgba(4,9,17,.94))}
+[data-testid="stMetricLabel"]{color:#8298b2!important;font-size:.78rem!important}
+[data-testid="stMetricValue"]{font-family:Orbitron,sans-serif!important;color:#edf7ff!important}
+[data-testid="stTextInput"] label,[data-testid="stTextArea"] label{color:#c3d4e7;font-weight:600}
+.module-intro{max-width:780px;color:#8da2bc;font-size:14px;line-height:1.75;margin:0 0 22px}
+.module-rule{height:1px;background:linear-gradient(90deg,#35ddff55,#17324d 55%,transparent);margin:0 0 24px}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #35ddff!important;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 @media(max-width:900px){.core{opacity:.22;right:-90px}.grid4{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.block-container{padding:1rem}.grid4{grid-template-columns:1fr}.hero{min-height:500px}}
 </style>
 """, unsafe_allow_html=True)
@@ -109,6 +124,13 @@ if not st.session_state.user:
 
 user = st.session_state.user
 
+def page_header(kicker, title, description):
+    st.markdown(
+        f'<div class="badge">● {kicker}</div><div class="cyber-title">{title}</div>'
+        f'<p class="module-intro">{description}</p><div class="module-rule"></div>',
+        unsafe_allow_html=True,
+    )
+
 def result_panel(result, label="ANALYSIS RESULT"):
     risk=result.get("risk","Unknown"); score=int(result.get("score",0))
     accent="#ff4f70" if risk in ("High","Critical") else ("#ffd166" if risk=="Medium" else "#3df0aa")
@@ -167,11 +189,9 @@ if page == "Dashboard":
             st.markdown(f'<div class="panel"><div class="panel-title">{title}</div><div style="font:700 20px Orbitron;margin:13px 0;color:#3df0aa;">● {value}</div><div class="panel-sub">{sub}</div><div class="meter" style="margin-top:15px;"><div style="width:92%;"></div></div></div>', unsafe_allow_html=True)
 
 elif page == "URL Scanner":
-    st.markdown('<div class="badge">● NETWORK INTELLIGENCE</div>', unsafe_allow_html=True)
-    st.markdown('<div class="cyber-title" style="font-size:2.7rem;">URL Threat Scanner</div>', unsafe_allow_html=True)
-    st.write("Analyze a URL using safe, non-executing heuristics and HTTP metadata.")
-    url = st.text_input("URL", placeholder="https://example.com")
-    if st.button("Scan URL", type="primary"):
+    page_header("NETWORK INTELLIGENCE", "URL Threat Scanner", "Inspect a web address with safe, non-executing heuristics and available HTTP metadata.")
+    url = st.text_input("Website address", placeholder="https://example.com", help="Links are assessed without opening or executing their content.")
+    if st.button("Scan address", type="primary", use_container_width=True):
         if not url.strip():
             st.warning("Enter a URL.")
         else:
@@ -191,9 +211,7 @@ elif page == "URL Scanner":
         result_panel(result, "URL THREAT ASSESSMENT")
 
 elif page == "Email / Phishing":
-    st.markdown('<div class="badge">● PHISHING DEFENSE</div>', unsafe_allow_html=True)
-    st.markdown('<div class="cyber-title" style="font-size:2.7rem;">Email & Phishing Analyzer</div>', unsafe_allow_html=True)
-    st.write("Paste an email or suspicious message. The analyzer does not execute links or attachments.")
+    page_header("PHISHING DEFENSE", "Email & Phishing Analyzer", "Review a suspicious email or message for common phishing signals. Links and attachments are never executed.")
     subject = st.text_input("Subject")
     sender = st.text_input("Sender", placeholder="security@example.com")
     body = st.text_area("Email body", height=260)
@@ -222,8 +240,7 @@ elif page == "Email / Phishing":
             st.write(f"• {item}")
 
 elif page == "Text Analyzer":
-    st.markdown('<div class="badge">● SIGNAL ANALYSIS</div>', unsafe_allow_html=True)
-    st.markdown('<div class="cyber-title" style="font-size:2.7rem;">Security Text Analyzer</div>', unsafe_allow_html=True)
+    page_header("SIGNAL ANALYSIS", "Security Text Analyzer", "Check suspicious messages, URLs, or log excerpts for common indicators of risk.")
     text = st.text_area("Paste suspicious text, a URL, log snippet, or message", height=300)
     if st.button("Analyze text", type="primary"):
         if not text.strip():
@@ -241,8 +258,7 @@ elif page == "Text Analyzer":
         result_panel(result, "PHISHING ASSESSMENT")
 
 elif page == "AI Assistant":
-    st.markdown('<div class="badge">● INTELLIGENCE COPILOT</div>', unsafe_allow_html=True)
-    st.markdown('<div class="cyber-title" style="font-size:2.7rem;">AI Security Assistant</div>', unsafe_allow_html=True)
+    page_header("INTELLIGENCE COPILOT", "AI Security Assistant", "Get clear, defensive guidance for cybersecurity questions and threat indicators.")
     st.markdown('<div class="panel"><div class="panel-title">GEMINI SECURITY COPILOT</div><div class="panel-sub" style="margin:7px 0 18px;">Defensive reasoning layer • safe security guidance</div>', unsafe_allow_html=True)
     prompt = st.text_area("Ask a cybersecurity question", height=180,
                           placeholder="Explain why this URL may be suspicious...")
