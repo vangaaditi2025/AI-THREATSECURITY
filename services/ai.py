@@ -1,29 +1,41 @@
 import os
+import streamlit as st
 
-SYSTEM = """You are the AI Security Assistant for AI ThreatGuard.
-Give defensive cybersecurity guidance. Do not provide malware, credential theft,
-evasion, exploitation, or destructive instructions. Clearly distinguish facts,
-heuristics, and uncertainty. Prefer practical safe remediation steps."""
+MODEL = "gemini-2.5-flash"
 
-def ask_gemini(prompt):
-    key = os.getenv("GEMINI_API_KEY", "")
+SYSTEM = (
+    "You are a defensive cybersecurity assistant. Give clear, practical guidance "
+    "on threat analysis, phishing, and security best practices. "
+    "Decline to provide malware, exploit code, or attack instructions."
+)
+
+def _get_key():
+    key = None
+    try:
+        key = st.secrets.get("GEMINI_API_KEY") or st.secrets.get("GOOGLE_API_KEY")
+    except Exception:
+        pass
+    return (key or os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or "").strip()
+
+def ask_gemini(prompt: str) -> str:
+    key = _get_key()
     if not key:
-        try:
-            import streamlit as st
-            key = st.secrets.get("GEMINI_API_KEY", "")
-        except Exception:
-            pass
-    if not key:
-        return "[AI unavailable] Add GEMINI_API_KEY to Streamlit secrets or environment variables."
-
-    model = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+        return "[AI unavailable] GEMINI_API_KEY not found. Add it in App settings → Secrets."
     try:
         from google import genai
+        from google.genai import types
+    except ImportError:
+        return "[AI unavailable] Package missing: add `google-genai` to requirements.txt."
+    try:
         client = genai.Client(api_key=key)
-        response = client.models.generate_content(
-            model=model,
-            contents=f"{SYSTEM}\n\nUser question:\n{prompt}"
+        resp = client.models.generate_content(
+            model=MODEL,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                system_instruction=SYSTEM,
+                max_output_tokens=1500,
+            ),
         )
-        return response.text
+        return resp.text or "[AI unavailable] Empty response (possibly blocked by safety filters)."
     except Exception as e:
-        return f"[AI unavailable] Gemini request failed: {type(e).__name__}"
+        return f"[AI unavailable] {type(e).__name__}: {e}"
